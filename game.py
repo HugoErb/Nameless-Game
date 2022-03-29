@@ -30,8 +30,8 @@ class Game:
         # Create collisions
         self.collisions = []
         for obj in tmx_data.objects:
-            if obj.type == "collisions":
-                self.collisions.append(obj.x, obj.y, obj.witdh, obj.height)
+            if obj.type == "collision":
+                self.collisions.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
 
         # Draw layer group
         self.group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=5)
@@ -73,16 +73,18 @@ class Game:
             if sprite.feet.collidelist(self.collisions) > -1:
                 sprite.move_back()
 
-    # While the game is running
     def run(self):
+        # While the game is running
         game_is_running = True
         while game_is_running:
+
+            # Save player location
+            self.player.save_location()
 
             # Catch key pressed
             self.handle_input()
 
             # Draw layer on screen
-            self.player.save_location()
             self.update()
             self.group.center(self.player.rect.center)
             self.group.draw(self.screen)

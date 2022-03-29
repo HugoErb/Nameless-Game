@@ -13,7 +13,7 @@ class Player(animation.AnimateSprite):
         self.position = [x, y]
 
         # Player move speed
-        self.speed = 1.5
+        self.speed = 1.2
 
         # Last animation of player
         self.last_animation = "walking_down"
@@ -76,6 +76,11 @@ class Player(animation.AnimateSprite):
         self.position[1] += self.speed * 0.8
         self.position[0] -= self.speed * 0.8
 
+    def move_back(self):
+        self.position = self.old_position
+        self.rect.center = self.position
+        self.feet.midbottom = self.rect.midbottom
+
     def not_moving(self):
         print("Not Moving")
         self.stop_animation(self.last_animation)
@@ -86,7 +91,6 @@ class Player(animation.AnimateSprite):
         self.animate(animation_type)
 
     def update(self):
-        self.position = self.old_position
         self.rect.center = self.position
         self.feet.midbottom = self.rect.midbottom
 
