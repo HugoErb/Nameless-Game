@@ -8,7 +8,6 @@ from settings import *
 
 
 class Game:
-    game_is_running = True
 
     # General setup
     def __init__(self):
@@ -54,11 +53,13 @@ class Game:
             self.player.move_down_and_right()
         elif pressed[KEY_LEFT] and pressed[KEY_DOWN]:
             self.player.move_down_and_left()
+        elif not pressed[KEY_UP] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_DOWN]:
+            self.player.not_moving()
 
-    # Checking if player is closing the game
-    # Game is closed if the player close the game window
+    # While the game is running
     def run(self):
-        while self.game_is_running:
+        game_is_running = True
+        while game_is_running:
 
             # Catch key pressed
             self.handle_input()
@@ -69,6 +70,7 @@ class Game:
             self.group.draw(self.screen)
             pygame.display.flip()
 
+            # Game is closed if the player close the game window
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.game_is_running = False
@@ -76,8 +78,8 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
-            # Add map to the screen
+            # Fill the empty part of the screen with black
             self.screen.fill('black')
-            # pygame.display.update()
 
+            # Manage FPS
             self.clock.tick(FPS)
