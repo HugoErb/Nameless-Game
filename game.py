@@ -34,19 +34,26 @@ class Game:
 
         self.clock = pygame.time.Clock()
 
+    # Manage player movements
     def handle_input(self):
         pressed = pygame.key.get_pressed()
 
-        if pressed[KEY_UP]:
+        if pressed[KEY_UP] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_DOWN]:
             self.player.move_up()
-        elif pressed[KEY_DOWN]:
+        elif pressed[KEY_DOWN] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_UP]:
             self.player.move_down()
-        elif pressed[KEY_LEFT]:
+        elif pressed[KEY_LEFT] and not pressed[KEY_UP] and not pressed[KEY_DOWN] and not pressed[KEY_RIGHT]:
             self.player.move_left()
-        elif pressed[KEY_RIGHT]:
+        elif pressed[KEY_RIGHT] and not pressed[KEY_UP] and not pressed[KEY_DOWN] and not pressed[KEY_LEFT]:
             self.player.move_right()
-        elif pressed[pygame.K_RIGHT] and pressed[pygame.K_UP]:
-            self.player.move_right()
+        elif pressed[KEY_RIGHT] and pressed[KEY_UP]:
+            self.player.move_up_and_right()
+        elif pressed[KEY_LEFT] and pressed[KEY_UP]:
+            self.player.move_up_and_left()
+        elif pressed[KEY_RIGHT] and pressed[KEY_DOWN]:
+            self.player.move_down_and_right()
+        elif pressed[KEY_LEFT] and pressed[KEY_DOWN]:
+            self.player.move_down_and_left()
 
     # Checking if player is closing the game
     # Game is closed if the player close the game window

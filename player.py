@@ -16,16 +16,40 @@ class Player(animation.AnimateSprite):
     # Moving methods #####################################################
 
     def move_right(self):
+        print("Moving Right")
         self.position[0] += self.speed
 
     def move_left(self):
+        print("Moving Left")
         self.position[0] -= self.speed
 
     def move_up(self):
+        print("Moving Up")
         self.position[1] -= self.speed
 
     def move_down(self):
+        print("Moving Down")
         self.position[1] += self.speed
+
+    def move_up_and_right(self):
+        print("Moving Up and Right")
+        self.position[1] -= self.speed * 0.8
+        self.position[0] += self.speed * 0.8
+
+    def move_up_and_left(self):
+        print("Moving Up and Left")
+        self.position[1] -= self.speed * 0.8
+        self.position[0] -= self.speed * 0.8
+
+    def move_down_and_right(self):
+        print("Moving Down and Right")
+        self.position[1] += self.speed * 0.8
+        self.position[0] += self.speed * 0.8
+
+    def move_down_and_left(self):
+        print("Moving Down and Left")
+        self.position[1] += self.speed * 0.8
+        self.position[0] -= self.speed * 0.8
 
     ######################################################################
 
