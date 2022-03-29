@@ -2,13 +2,16 @@ import pygame
 
 
 class AnimateSprite(pygame.sprite.Sprite):
+    size = 54
 
     def __init__(self, sprite_name, sprite_type):
         super().__init__()
         self.image = pygame.image.load(f"graphics/{sprite_type}/{sprite_name}.png")
+
         # Load sprite
         self.image = self.get_image(0, 128)
         self.image.set_colorkey([0, 0, 0])
+        self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.current_image = 0
         self.images = load_player_walking_animation_images(sprite_name, sprite_type)
 
@@ -36,6 +39,7 @@ class AnimateSprite(pygame.sprite.Sprite):
 
         # Modify current animation
         self.image = self.images_list[int(self.current_image)]
+        self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.image.set_colorkey([0, 0, 0])
 
     def stop_animation(self, last_animation):
@@ -51,6 +55,7 @@ class AnimateSprite(pygame.sprite.Sprite):
 
         # Modify current animation
         self.image = self.images_list[int(self.current_image)]
+        self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.image.set_colorkey([0, 0, 0])
 
 

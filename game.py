@@ -21,7 +21,7 @@ class Game:
         tmx_data = pytmx.util_pygame.load_pygame("graphics/map/map.tmx")
         map_data = pyscroll.data.TiledMapData(tmx_data)
         map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
-        map_layer.zoom = 1.9
+        map_layer.zoom = 2.5
 
         # Create player
         player_position = tmx_data.get_object_by_name("player_spawn_point")
