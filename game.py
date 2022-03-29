@@ -27,6 +27,12 @@ class Game:
         player_position = tmx_data.get_object_by_name("player_spawn_point")
         self.player = Player(player_position.x, player_position.y)
 
+        # Create collisions
+        self.collisions = []
+        for obj in tmx_data.objects:
+            if obj.type == "collisions":
+                self.collisions.append(obj.x, obj.y, obj.witdh, obj.height)
+
         # Draw layer group
         self.group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=5)
         self.group.add(self.player)
@@ -37,6 +43,7 @@ class Game:
     def handle_input(self):
         pressed = pygame.key.get_pressed()
 
+        # Animate the sprite when the player move in a certain direction
         if pressed[KEY_UP] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_DOWN]:
             self.player.move_up()
         elif pressed[KEY_DOWN] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_UP]:
@@ -53,8 +60,18 @@ class Game:
             self.player.move_down_and_right()
         elif pressed[KEY_LEFT] and pressed[KEY_DOWN]:
             self.player.move_down_and_left()
+
+        # If the player do not move, reset animation
         elif not pressed[KEY_UP] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_DOWN]:
             self.player.not_moving()
+
+    def update(self):
+        self.group.update()
+
+        # Check for collisions
+        for sprite in self.group.sprites():
+            if sprite.feet.collidelist(self.collisions) > -1:
+                sprite.move_back()
 
     # While the game is running
     def run(self):
@@ -65,7 +82,8 @@ class Game:
             self.handle_input()
 
             # Draw layer on screen
-            self.group.update()
+            self.player.save_location()
+            self.update()
             self.group.center(self.player.rect.center)
             self.group.draw(self.screen)
             pygame.display.flip()

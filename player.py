@@ -1,3 +1,5 @@
+import pygame
+
 import animation
 
 
@@ -15,6 +17,10 @@ class Player(animation.AnimateSprite):
 
         # Last animation of player
         self.last_animation = "walking_down"
+
+        # Initialize feet of the player, for better collisions and effects
+        self.feet = pygame.Rect(0, 0, self.rect.width * 0.5, 12)
+        self.old_position = self.position.copy()
 
     # Moving methods #####################################################
 
@@ -80,4 +86,9 @@ class Player(animation.AnimateSprite):
         self.animate(animation_type)
 
     def update(self):
+        self.position = self.old_position
         self.rect.center = self.position
+        self.feet.midbottom = self.rect.midbottom
+
+    def save_location(self):
+        self.old_position = self.position.copy()
