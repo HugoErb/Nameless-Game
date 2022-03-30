@@ -1,4 +1,3 @@
-import pygame, sys
 from game import Game
 
 # Main program

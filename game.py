@@ -15,8 +15,10 @@ class Game:
         self.game_is_running = True
 
         # Window setup
+        icon = pygame.image.load('graphics/img/icon.png')
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGTH))
         pygame.display.set_caption('Nameless Game')
+        pygame.display.set_icon(icon)
 
         # Load TMX map
         tmx_data = pytmx.util_pygame.load_pygame("graphics/map/map.tmx")
@@ -29,17 +31,20 @@ class Game:
         self.player = Player(player_position.x, player_position.y)
         self.player_state = "alive"
 
-        # Create collision_areas
+        # Create special area on the map
         self.collision_areas = []
+        self.death_areas = []
+        self.fall_areas = []
         for obj in tmx_data.objects:
+            # Create collision_areas
             if obj.type == "collision":
                 self.collision_areas.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
-
-        # Create death areas
-        self.death_areas = []
-        for obj in tmx_data.objects:
-            if obj.type == "death":
+            # Create death areas
+            elif obj.type == "death":
                 self.death_areas.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
+            # Create fall areas
+            elif obj.type == "fall":
+                self.fall_areas.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
 
         # Draw layer group
         self.group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=3)
@@ -85,8 +90,14 @@ class Game:
             # Check if walking in death areas
             if self.player_state == "alive":
                 if sprite.feet.collidelist(self.death_areas) > -1:
-                    self.player.die()
-                    # self.player_state = "dead"
+                    sprite.die()
+                    self.player_state = "dead"
+
+            # Check if walking in fall areas
+            if self.player_state == "alive":
+                if sprite.feet.collidelist(self.fall_areas) > -1:
+                    sprite.fall()
+                    self.player_state = "dead"
 
     def run(self):
         # While the game is running
@@ -99,8 +110,8 @@ class Game:
             self.handle_input()
 
             # Draw layer on screen
-            if self.player_state == "alive":
-                self.update()
+            # if self.player_state == "alive":
+            self.update()
             self.group.center(self.player.rect.center)
             self.group.draw(self.screen)
             pygame.display.flip()

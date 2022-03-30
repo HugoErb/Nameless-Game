@@ -29,6 +29,8 @@ class AnimateSprite(pygame.sprite.Sprite):
             self.images_list = self.images["walking_down"]
         elif animation_type == "death":
             self.images_list = self.images["death"]
+        elif animation_type == "fall":
+            self.images_list = self.images["fall"]
 
         # Reset animations
         if animation_type != "death":
@@ -41,6 +43,11 @@ class AnimateSprite(pygame.sprite.Sprite):
         else:
             if self.current_image <= len(self.images_list):
                 self.image = self.images_list[int(self.current_image)]
+
+        # Decrease sprite size gradually in the fall case
+        if animation_type == "fall":
+            if self.size > 0:
+                self.size -= 1
 
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.image.set_colorkey([0, 0, 0])
@@ -68,7 +75,8 @@ def load_animation_images(sprite_name, sprite_type):
         "walking_right": [],
         "walking_up": [],
         "walking_down": [],
-        "death": []
+        "death": [],
+        "fall": [],
     }
     sprite = pygame.image.load(f"graphics/{sprite_type}/{sprite_name}.png")
 
@@ -89,6 +97,11 @@ def load_animation_images(sprite_name, sprite_type):
     for i in range(0, 6):
         img_list = get_image((64 * i), 1280, sprite)
         images["death"].append(img_list)
+
+    # Falling animation
+    for i in range(0, 2):
+        img_list = get_image((320 + 64 * i), 128, sprite)
+        images["fall"].append(img_list)
 
     return images
 
