@@ -22,6 +22,11 @@ class Player(animation.AnimateSprite):
         self.feet = pygame.Rect(0, 0, self.rect.width * 0.5, 12)
         self.old_position = self.position.copy()
 
+        # Player stats
+        self.health = 100
+        self.stamina = 100
+        self.attack = 20
+
     # Moving methods #####################################################
 
     def move_right(self):
@@ -86,6 +91,11 @@ class Player(animation.AnimateSprite):
         self.stop_animation(self.last_animation)
 
     ######################################################################
+
+    def die(self):
+        while self.health != 0:
+            self.health -= 1
+        self.update_animation(self, "death")
 
     def update_animation(self, animation_type):
         self.animate(animation_type)

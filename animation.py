@@ -13,7 +13,7 @@ class AnimateSprite(pygame.sprite.Sprite):
         self.image.set_colorkey([0, 0, 0])
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.current_image = 0
-        self.images = load_player_walking_animation_images(sprite_name, sprite_type)
+        self.images = load_animation_images(sprite_name, sprite_type)
 
     def get_image(self, x, y):
         image = pygame.Surface([64, 64])
@@ -32,13 +32,21 @@ class AnimateSprite(pygame.sprite.Sprite):
             self.images_list = self.images["walking_up"]
         elif animation_type == "walking_down":
             self.images_list = self.images["walking_down"]
+        elif animation_type == "death":
+            self.images_list = self.images["death"]
 
         # Reset animations
-        if self.current_image >= len(self.images_list):
-            self.current_image = 0
+        if animation_type != "death":
+            if self.current_image >= len(self.images_list):
+                self.current_image = 0
 
         # Modify current animation
-        self.image = self.images_list[int(self.current_image)]
+        if animation_type != "death":
+            self.image = self.images_list[int(self.current_image)]
+        else:
+            if self.current_image <= len(self.images_list):
+                self.image = self.images_list[int(self.current_image)]
+
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.image.set_colorkey([0, 0, 0])
 
@@ -59,14 +67,17 @@ class AnimateSprite(pygame.sprite.Sprite):
         self.image.set_colorkey([0, 0, 0])
 
 
-def load_player_walking_animation_images(sprite_name, sprite_type):
+def load_animation_images(sprite_name, sprite_type):
     images = {
         "walking_left": [],
         "walking_right": [],
         "walking_up": [],
         "walking_down": [],
+        "death": []
     }
     sprite = pygame.image.load(f"graphics/{sprite_type}/{sprite_name}.png")
+
+    # Walking animation
     for i in range(0, 4):
         for j in range(0, 9):
             img_list = get_image((64 * j), (512 + 64 * i), sprite)
@@ -78,6 +89,11 @@ def load_player_walking_animation_images(sprite_name, sprite_type):
                 images["walking_down"].append(img_list)
             elif i == 3:
                 images["walking_right"].append(img_list)
+
+    # Death animation
+    for i in range(0, 5):
+        img_list = get_image((64 * i), 1280, sprite)
+        images["death"].append(img_list)
 
     return images
 

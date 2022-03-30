@@ -1,8 +1,8 @@
 import pygame
 
-# Variables for game setup
-WIDTH = 1280
-HEIGTH = 720
+# Game setup
+WINDOW_WIDTH = 1280
+WINDOW_HEIGTH = 720
 FPS = 144
 
 # Key mapping

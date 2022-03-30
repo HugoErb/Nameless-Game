@@ -14,7 +14,7 @@ class Game:
         pygame.init()
 
         # Window setup
-        self.screen = pygame.display.set_mode((WIDTH, HEIGTH))
+        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGTH))
         pygame.display.set_caption('Nameless Game')
 
         # Load TMX map
@@ -27,14 +27,20 @@ class Game:
         player_position = tmx_data.get_object_by_name("player_spawn_point")
         self.player = Player(player_position.x, player_position.y)
 
-        # Create collisions
-        self.collisions = []
+        # Create collision_areas
+        self.collision_areas = []
         for obj in tmx_data.objects:
             if obj.type == "collision":
-                self.collisions.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
+                self.collision_areas.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
+
+        # Create death areas
+        self.death_areas = []
+        for obj in tmx_data.objects:
+            if obj.type == "death":
+                self.death_areas.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
 
         # Draw layer group
-        self.group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=5)
+        self.group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=3)
         self.group.add(self.player)
 
         self.clock = pygame.time.Clock()
@@ -68,10 +74,14 @@ class Game:
     def update(self):
         self.group.update()
 
-        # Check for collisions
         for sprite in self.group.sprites():
-            if sprite.feet.collidelist(self.collisions) > -1:
+            # Check for collision
+            if sprite.feet.collidelist(self.collision_areas) > -1:
                 sprite.move_back()
+
+            # Check if walking in death areas
+            if sprite.feet.collidelist(self.death_areas) == 0:
+                sprite.die()
 
     def run(self):
         # While the game is running
