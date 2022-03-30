@@ -9,16 +9,11 @@ class AnimateSprite(pygame.sprite.Sprite):
         self.image = pygame.image.load(f"graphics/{sprite_type}/{sprite_name}.png")
 
         # Load sprite
-        self.image = self.get_image(0, 128)
+        self.image = get_image(0, 128, self.image)
         self.image.set_colorkey([0, 0, 0])
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.current_image = 0
         self.images = load_animation_images(sprite_name, sprite_type)
-
-    def get_image(self, x, y):
-        image = pygame.Surface([64, 64])
-        image.blit(self.image, (0, 0), (x, y, 64, 64))
-        return image
 
     def animate(self, animation_type):
         # Animation Speed
@@ -91,7 +86,7 @@ def load_animation_images(sprite_name, sprite_type):
                 images["walking_right"].append(img_list)
 
     # Death animation
-    for i in range(0, 5):
+    for i in range(0, 6):
         img_list = get_image((64 * i), 1280, sprite)
         images["death"].append(img_list)
 

@@ -330,7 +330,7 @@
   <object id="63" type="collision" x="1440" y="95" width="32" height="32"/>
   <object id="64" type="collision" x="1507" y="384" width="27" height="30"/>
   <object id="65" type="collision" x="1381" y="617" width="54" height="52"/>
-  <object id="66" type="death" x="1366" y="1088" width="49" height="43"/>
-  <object id="67" type="death" x="219" y="800" width="45" height="43"/>
+  <object id="66" type="death" x="1373.25" y="1092.5" width="38.75" height="35.5"/>
+  <object id="67" type="death" x="223" y="803.455" width="35" height="36.0909" rotation="1.01778e-13"/>
  </objectgroup>
 </map>

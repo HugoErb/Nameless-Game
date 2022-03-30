@@ -12,6 +12,7 @@ class Game:
     # General setup
     def __init__(self):
         pygame.init()
+        self.game_is_running = True
 
         # Window setup
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGTH))
@@ -26,6 +27,7 @@ class Game:
         # Create player
         player_position = tmx_data.get_object_by_name("player_spawn_point")
         self.player = Player(player_position.x, player_position.y)
+        self.player_state = "alive"
 
         # Create collision_areas
         self.collision_areas = []
@@ -50,26 +52,27 @@ class Game:
         pressed = pygame.key.get_pressed()
 
         # Animate the sprite when the player move in a certain direction
-        if pressed[KEY_UP] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_DOWN]:
-            self.player.move_up()
-        elif pressed[KEY_DOWN] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_UP]:
-            self.player.move_down()
-        elif pressed[KEY_LEFT] and not pressed[KEY_UP] and not pressed[KEY_DOWN] and not pressed[KEY_RIGHT]:
-            self.player.move_left()
-        elif pressed[KEY_RIGHT] and not pressed[KEY_UP] and not pressed[KEY_DOWN] and not pressed[KEY_LEFT]:
-            self.player.move_right()
-        elif pressed[KEY_RIGHT] and pressed[KEY_UP]:
-            self.player.move_up_and_right()
-        elif pressed[KEY_LEFT] and pressed[KEY_UP]:
-            self.player.move_up_and_left()
-        elif pressed[KEY_RIGHT] and pressed[KEY_DOWN]:
-            self.player.move_down_and_right()
-        elif pressed[KEY_LEFT] and pressed[KEY_DOWN]:
-            self.player.move_down_and_left()
+        if self.player_state == "alive":
+            if pressed[KEY_UP] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_DOWN]:
+                self.player.move_up()
+            elif pressed[KEY_DOWN] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_UP]:
+                self.player.move_down()
+            elif pressed[KEY_LEFT] and not pressed[KEY_UP] and not pressed[KEY_DOWN] and not pressed[KEY_RIGHT]:
+                self.player.move_left()
+            elif pressed[KEY_RIGHT] and not pressed[KEY_UP] and not pressed[KEY_DOWN] and not pressed[KEY_LEFT]:
+                self.player.move_right()
+            elif pressed[KEY_RIGHT] and pressed[KEY_UP]:
+                self.player.move_up_and_right()
+            elif pressed[KEY_LEFT] and pressed[KEY_UP]:
+                self.player.move_up_and_left()
+            elif pressed[KEY_RIGHT] and pressed[KEY_DOWN]:
+                self.player.move_down_and_right()
+            elif pressed[KEY_LEFT] and pressed[KEY_DOWN]:
+                self.player.move_down_and_left()
 
-        # If the player do not move, reset animation
-        elif not pressed[KEY_UP] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_DOWN]:
-            self.player.not_moving()
+            # If the player do not move, reset animation
+            elif not pressed[KEY_UP] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_DOWN]:
+                self.player.not_moving()
 
     def update(self):
         self.group.update()
@@ -80,13 +83,14 @@ class Game:
                 sprite.move_back()
 
             # Check if walking in death areas
-            if sprite.feet.collidelist(self.death_areas) == 0:
-                sprite.die()
+            if self.player_state == "alive":
+                if sprite.feet.collidelist(self.death_areas) > -1:
+                    self.player.die()
+                    # self.player_state = "dead"
 
     def run(self):
         # While the game is running
-        game_is_running = True
-        while game_is_running:
+        while self.game_is_running:
 
             # Save player location
             self.player.save_location()
@@ -95,7 +99,8 @@ class Game:
             self.handle_input()
 
             # Draw layer on screen
-            self.update()
+            if self.player_state == "alive":
+                self.update()
             self.group.center(self.player.rect.center)
             self.group.draw(self.screen)
             pygame.display.flip()
