@@ -17,7 +17,10 @@ class AnimateSprite(pygame.sprite.Sprite):
 
     def animate(self, animation_type):
         # Animation Speed
-        self.current_image += 0.08
+        if animation_type == "death" or animation_type == "fall":
+            self.current_image += 0.025
+        else:
+            self.current_image += 0.08
 
         if animation_type == "walking_left":
             self.images_list = self.images["walking_left"]
@@ -47,7 +50,7 @@ class AnimateSprite(pygame.sprite.Sprite):
         # Decrease sprite size gradually in the fall case
         if animation_type == "fall":
             if self.size > 0:
-                self.size -= 1
+                self.size -= 0.3
 
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.image.set_colorkey([0, 0, 0])

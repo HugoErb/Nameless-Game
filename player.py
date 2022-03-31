@@ -1,6 +1,7 @@
 import pygame
 
 import animation
+from audio import Audio
 
 
 class Player(animation.AnimateSprite):
@@ -86,6 +87,7 @@ class Player(animation.AnimateSprite):
         self.position = self.old_position
         self.rect.center = self.position
         self.feet.midbottom = self.rect.midbottom
+        Audio("collision", "sounds", 0.5)
 
     def not_moving(self):
         # print("Not Moving")
@@ -94,11 +96,12 @@ class Player(animation.AnimateSprite):
     ######################################################################
 
     def die(self, make_animation):
-        print("Player is dead")
-        # Set life to 0 gradually
-        while self.health != 0:
-            print("HP : " + str(self.health))
-            self.health -= 1
+        if self.health > 0:
+            # Set life to 0 gradually
+            while self.health > 0:
+                print("HP : " + str(self.health))
+                self.health -= 1
+            print("Player is dead")
         if make_animation == "true":
             self.update_animation("death")
 

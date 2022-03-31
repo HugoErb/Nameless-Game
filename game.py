@@ -88,16 +88,15 @@ class Game:
                 sprite.move_back()
 
             # Check if walking in death areas
-            if self.player_state == "alive":
-                if sprite.feet.collidelist(self.death_areas) > -1:
-                    sprite.die("true")
-                    # self.player_state = "dead"
+            # if self.player_state == "alive":
+            if sprite.feet.collidelist(self.death_areas) > -1:
+                sprite.die("true")
+                self.player_state = "dead"
 
             # Check if walking in fall areas
-            if self.player_state == "alive":
-                if sprite.feet.collidelist(self.fall_areas) > -1:
-                    sprite.fall()
-                    self.player_state = "dead"
+            if sprite.feet.collidelist(self.fall_areas) > -1:
+                sprite.fall()
+                self.player_state = "dead"
 
     def run(self):
         # While the game is running
