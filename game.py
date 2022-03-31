@@ -90,8 +90,8 @@ class Game:
             # Check if walking in death areas
             if self.player_state == "alive":
                 if sprite.feet.collidelist(self.death_areas) > -1:
-                    sprite.die()
-                    self.player_state = "dead"
+                    sprite.die("true")
+                    # self.player_state = "dead"
 
             # Check if walking in fall areas
             if self.player_state == "alive":
@@ -110,7 +110,6 @@ class Game:
             self.handle_input()
 
             # Draw layer on screen
-            # if self.player_state == "alive":
             self.update()
             self.group.center(self.player.rect.center)
             self.group.draw(self.screen)

@@ -93,18 +93,19 @@ class Player(animation.AnimateSprite):
 
     ######################################################################
 
-    def die(self):
+    def die(self, make_animation):
         print("Player is dead")
         # Set life to 0 gradually
         while self.health != 0:
             print("HP : " + str(self.health))
             self.health -= 1
-
-        self.update_animation("death")
+        if make_animation == "true":
+            self.update_animation("death")
 
     def fall(self):
         print("Player has fallen")
         self.update_animation("fall")
+        self.die("false")
 
     def update_animation(self, animation_type):
         self.animate(animation_type)
