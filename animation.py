@@ -2,72 +2,76 @@ import pygame
 
 
 class AnimateSprite(pygame.sprite.Sprite):
-    size = 54
 
     def __init__(self, sprite_name, sprite_type):
         super().__init__()
-        self.image = pygame.image.load(f"graphics/{sprite_type}/{sprite_name}.png")
+
+        # Animations setup
+        self.last_animation = "none"
+        self.animation_finished = "false"
+        self.size = 54
+        self.current_image = 0
 
         # Load sprite
+        self.image = pygame.image.load(f"graphics/{sprite_type}/{sprite_name}.png")
         self.image = get_image(0, 128, self.image)
         self.image.set_colorkey([0, 0, 0])
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
-        self.current_image = 0
         self.images = load_animation_images(sprite_name, sprite_type)
 
+        # Animation and player speed
+        self.clock = 0
+        self.speed = 1.1
+
     def animate(self, animation_type):
-        # Animation Speed
-        if animation_type == "death" or animation_type == "fall":
-            self.current_image += 0.025
-        else:
-            self.current_image += 0.08
-
-        if animation_type == "walking_left":
-            self.images_list = self.images["walking_left"]
-        elif animation_type == "walking_right":
-            self.images_list = self.images["walking_right"]
-        elif animation_type == "walking_up":
-            self.images_list = self.images["walking_up"]
-        elif animation_type == "walking_down":
-            self.images_list = self.images["walking_down"]
-        elif animation_type == "death":
-            self.images_list = self.images["death"]
-        elif animation_type == "fall":
-            self.images_list = self.images["fall"]
-
-        # Reset animations
-        if animation_type != "death":
-            if self.current_image >= len(self.images_list):
+        # We only launch the method if the animation is not finished
+        if self.animation_finished == "false":
+            # Reset loop index for new animation launched
+            if animation_type != self.last_animation:
+                self.last_animation = animation_type
                 self.current_image = 0
+                self.animation_finished = "false"
 
-        # Modify current animation
-        if animation_type != "death":
-            self.image = self.images_list[int(self.current_image)]
-        else:
-            if self.current_image <= len(self.images_list):
-                self.image = self.images_list[int(self.current_image)]
+            # Animation speed
+            self.clock += self.speed * 8.5
 
-        # Decrease sprite size gradually in the fall case
-        if animation_type == "fall":
-            if self.size > 0:
-                self.size -= 0.3
+            # When the clock timer is reached
+            if self.clock >= 100:
+                # Modify current animation
+                if animation_type != "death":
+                    self.current_image += 1
+                elif animation_type == "death":
+                    if self.current_image + 1 < len(self.images[animation_type]):
+                        self.current_image += 1
+                    else:
+                        self.animation_finished = "true"
+                # Reset animation loop
+                if self.current_image >= len(self.images[animation_type]) and animation_type != "death":
+                    self.current_image = 0
+                self.clock = 0
 
-        self.image = pygame.transform.scale(self.image, (self.size, self.size))
-        self.image.set_colorkey([0, 0, 0])
+            # Transform the sprite
+            self.image = self.images[animation_type][self.current_image]
+            self.image = pygame.transform.scale(self.image, (self.size, self.size))
+            self.image.set_colorkey([0, 0, 0])
+
+            # Decrease sprite size gradually in the fall case
+            if animation_type == "fall":
+                if self.size > 0:
+                    self.size -= 0.5
+                else:
+                    self.animation_finished = "true"
+
+            if self.animation_finished == "true":
+                return "true"
+            else:
+                return "false"
 
     def stop_animation(self, last_animation):
         self.current_image = 0
-        if last_animation == "walking_left":
-            self.images_list = self.images["walking_left"]
-        elif last_animation == "walking_right":
-            self.images_list = self.images["walking_right"]
-        elif last_animation == "walking_up":
-            self.images_list = self.images["walking_up"]
-        elif last_animation == "walking_down":
-            self.images_list = self.images["walking_down"]
+        self.image = self.images[last_animation][self.current_image]
 
         # Modify current animation
-        self.image = self.images_list[int(self.current_image)]
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.image.set_colorkey([0, 0, 0])
 

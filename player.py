@@ -13,9 +13,6 @@ class Player(animation.AnimateSprite):
         self.rect = self.image.get_rect()
         self.position = [x, y]
 
-        # Player move speed
-        self.speed = 1.2
-
         # Last animation of player
         self.last_animation = "walking_down"
 
@@ -27,67 +24,68 @@ class Player(animation.AnimateSprite):
         self.health = 100
         self.stamina = 100
         self.attack = 20
+        self.state = "alive"
 
     # Moving methods #####################################################
 
     def move_right(self):
         # print("Moving Right")
-        self.update_animation("walking_right")
+        self.animate("walking_right")
         self.last_animation = "walking_right"
         self.position[0] += self.speed
 
     def move_left(self):
         # print("Moving Left")
-        self.update_animation("walking_left")
+        self.animate("walking_left")
         self.last_animation = "walking_left"
         self.position[0] -= self.speed
 
     def move_up(self):
         # print("Moving Up")
-        self.update_animation("walking_up")
+        self.animate("walking_up")
         self.last_animation = "walking_up"
         self.position[1] -= self.speed
 
     def move_down(self):
         # print("Moving Down")
-        self.update_animation("walking_down")
+        self.animate("walking_down")
         self.last_animation = "walking_down"
         self.position[1] += self.speed
 
     def move_up_and_right(self):
         # print("Moving Up and Right")
-        self.update_animation("walking_up")
+        self.animate("walking_up")
         self.last_animation = "walking_up"
         self.position[1] -= self.speed * 0.8
         self.position[0] += self.speed * 0.8
 
     def move_up_and_left(self):
         # print("Moving Up and Left")
-        self.update_animation("walking_up")
+        self.animate("walking_up")
         self.last_animation = "walking_up"
         self.position[1] -= self.speed * 0.8
         self.position[0] -= self.speed * 0.8
 
     def move_down_and_right(self):
         # print("Moving Down and Right")
-        self.update_animation("walking_down")
+        self.animate("walking_down")
         self.last_animation = "walking_down"
         self.position[1] += self.speed * 0.8
         self.position[0] += self.speed * 0.8
 
     def move_down_and_left(self):
         # print("Moving Down and Left")
-        self.update_animation("walking_down")
+        self.animate("walking_down")
         self.last_animation = "walking_down"
         self.position[1] += self.speed * 0.8
         self.position[0] -= self.speed * 0.8
 
     def move_back(self):
         # print("Collision")
+        Audio("collision", "sounds", 0.5)
         self.position = self.old_position
         self.rect.center = self.position
         self.feet.midbottom = self.rect.midbottom
-        Audio("collision", "sounds", 0.5)
 
     def not_moving(self):
         # print("Not Moving")
@@ -99,19 +97,19 @@ class Player(animation.AnimateSprite):
         if self.health > 0:
             # Set life to 0 gradually
             while self.health > 0:
-                print("HP : " + str(self.health))
                 self.health -= 1
             print("Player is dead")
         if make_animation == "true":
-            self.update_animation("death")
+            self.animate("death")
 
     def fall(self):
-        print("Player has fallen")
-        self.update_animation("fall")
-        self.die("false")
-
-    def update_animation(self, animation_type):
-        self.animate(animation_type)
+        if self.state != "dead":
+            result = self.animate("fall")
+            if result == "true":
+                self.state = "dead"
+        else:
+            print("Player has fallen")
+            self.die("false")
 
     def update(self):
         self.rect.center = self.position
