@@ -105,13 +105,13 @@ class Player(animation.AnimateSprite):
 
     def fall(self):
         if self.state != "dead":
+            # Animate the falling
             result = self.animate("fall")
-            print("Position verticale :" + str(self.position[1]))
-            print("Position horizontale :" + str(self.position[0]))
-            self.position[1] += 0.25
-            self.position[0] += 0.25
             if result:
                 self.state = "dead"
+            # Move the player to compensate the size reduction
+            self.position[1] += 0.25
+            self.position[0] += 0.25
         else:
             if self.health > 0:
                 print("Player has fallen")

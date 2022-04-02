@@ -15,7 +15,7 @@ class AnimateSprite(pygame.sprite.Sprite):
         # Load sprite
         self.image = pygame.image.load(f"graphics/{sprite_type}/{sprite_name}.png")
         self.image = get_image(0, 128, self.image)
-        self.image.set_colorkey([0, 0, 0])
+        self.image.set_colorkey(0, 0)
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.images = load_animation_images(sprite_name, sprite_type)
 
@@ -53,7 +53,7 @@ class AnimateSprite(pygame.sprite.Sprite):
             # Transform the sprite
             self.image = self.images[animation_type][self.current_image]
             self.image = pygame.transform.scale(self.image, (self.size, self.size))
-            self.image.set_colorkey([0, 0, 0])
+            self.image.set_colorkey(0, 0)
 
             # Decrease sprite size gradually in the fall case
             if animation_type == "fall":
@@ -73,7 +73,7 @@ class AnimateSprite(pygame.sprite.Sprite):
 
         # Modify current animation
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
-        self.image.set_colorkey([0, 0, 0])
+        self.image.set_colorkey(0, 0)
 
 
 def load_animation_images(sprite_name, sprite_type):

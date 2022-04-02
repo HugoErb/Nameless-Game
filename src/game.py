@@ -21,7 +21,7 @@ class Game:
 
         # Map setup
         self.map_zoom = MAP_ZOOM
-        self.map_tmx_file_path = "graphics/map/map.tmx"
+        self.map_tmx_file_path = "./graphics/map/map.tmx"
         self.collision_areas = []
         self.death_areas = []
         self.fall_areas = []
@@ -42,6 +42,7 @@ class Game:
         map_data = pyscroll.data.TiledMapData(tmx_data)
         map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
         map_layer.zoom = self.map_zoom
+        self.nb_layer = len(tmx_data.layers)
 
         # Create player
         player_position = tmx_data.get_object_by_name("player_spawn_point")
@@ -60,7 +61,7 @@ class Game:
                 self.fall_areas.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
 
         # Draw layer group
-        self.group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=3)
+        self.group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=self.nb_layer - 3)
         self.group.add(self.player)
 
         self.clock = pygame.time.Clock()
