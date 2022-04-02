@@ -45,7 +45,7 @@ class Game:
         self.nb_layer = len(tmx_data.layers)
 
         # Create player
-        player_position = tmx_data.get_object_by_name("player_spawn_point")
+        player_position = tmx_data.get_object_by_name(PLAYER_SPAWN_POINT)
         self.player = Player(player_position.x, player_position.y)
 
         # Create specials areas on the map

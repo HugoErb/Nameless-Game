@@ -9,6 +9,7 @@ WINDOW_ICON_PATH = "./graphics/img/icon.png"
 
 # Map setup
 MAP_ZOOM = 2.5
+PLAYER_SPAWN_POINT = "player_spawn_point"
 
 # Game setup
 FPS = 144
