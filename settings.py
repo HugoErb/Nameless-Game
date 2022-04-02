@@ -1,8 +1,16 @@
 import pygame
 
-# Game setup
+# Window setup
 WINDOW_WIDTH = 1280
 WINDOW_HEIGTH = 720
+WINDOW_BACKGROUND_COLOR = "black"
+WINDOW_NAME = "Nameless Game"
+WINDOW_ICON_PATH = "graphics/img/icon.png"
+
+# Map setup
+MAP_ZOOM = 2.5
+
+# Game setup
 FPS = 144
 
 # Key mapping

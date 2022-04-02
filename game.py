@@ -16,11 +16,11 @@ class Game:
 
         # Game setup
         self.game_is_running = True
-        self.window_name = "Nameless Game"
-        self.window_icon_path = "graphics/img/icon.png"
+        self.window_name = WINDOW_NAME
+        self.window_icon_path = WINDOW_ICON_PATH
 
         # Map setup
-        self.map_zoom = 2.5
+        self.map_zoom = MAP_ZOOM
         self.map_tmx_file_path = "graphics/map/map.tmx"
         self.collision_areas = []
         self.death_areas = []
@@ -101,15 +101,14 @@ class Game:
                 sprite.move_back()
 
             # Check if walking in death areas
-            # if self.player_state == "alive":
             if sprite.feet.collidelist(self.death_areas) > -1:
                 sprite.die("true")
                 self.player_state = "dead"
 
             # Check if walking in fall areas
-            if sprite.feet.collidelist(self.fall_areas) > -1:
+            if sprite.feet.collidelist(self.fall_areas) > -1 or self.player_state == "falling":
+                self.player_state = "falling"
                 sprite.fall()
-                self.player_state = "dead"
 
     def run(self):
         # While the game is running
@@ -121,9 +120,14 @@ class Game:
             # Catch key pressed
             self.handle_input()
 
-            # Draw layer on screen
+            # Update several aspects of the game each frame
             self.update()
-            self.group.center(self.player.rect.center)
+
+            # Center camera on player
+            if self.player_state != "falling":
+                self.group.center(self.player.rect.center)
+
+            # Draw layer on screen
             self.group.draw(self.screen)
             pygame.display.flip()
 
@@ -136,7 +140,7 @@ class Game:
                     sys.exit()
 
             # Fill the empty part of the screen with black
-            self.screen.fill('black')
+            self.screen.fill(WINDOW_BACKGROUND_COLOR)
 
             # Set Frame Per Second
             self.clock.tick(FPS)

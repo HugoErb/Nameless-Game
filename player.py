@@ -106,11 +106,16 @@ class Player(animation.AnimateSprite):
     def fall(self):
         if self.state != "dead":
             result = self.animate("fall")
+            print("Position verticale :" + str(self.position[1]))
+            print("Position horizontale :" + str(self.position[0]))
+            self.position[1] += 0.25
+            self.position[0] += 0.25
             if result:
                 self.state = "dead"
-            print("Player has fallen")
         else:
-            self.die("false")
+            if self.health > 0:
+                print("Player has fallen")
+                self.die("false")
 
     def update(self):
         self.rect.center = self.position
