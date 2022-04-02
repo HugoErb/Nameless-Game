@@ -9,32 +9,45 @@ from settings import *
 
 class Game:
 
-    # General setup
     def __init__(self):
         pygame.init()
+
+        # Variables #######################################################
+
+        # Game setup
         self.game_is_running = True
+        self.window_name = "Nameless Game"
+        self.window_icon_path = "graphics/img/icon.png"
+
+        # Map setup
+        self.map_zoom = 2.5
+        self.map_tmx_file_path = "graphics/map/map.tmx"
+        self.collision_areas = []
+        self.death_areas = []
+        self.fall_areas = []
+
+        # Player setup
+        self.player_state = "alive"
+
+        ###################################################################
 
         # Window setup
-        icon = pygame.image.load('graphics/img/icon.png')
+        icon = pygame.image.load(self.window_icon_path)
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGTH))
-        pygame.display.set_caption('Nameless Game')
+        pygame.display.set_caption(self.window_name)
         pygame.display.set_icon(icon)
 
         # Load TMX map
-        tmx_data = pytmx.util_pygame.load_pygame("graphics/map/map.tmx")
+        tmx_data = pytmx.util_pygame.load_pygame(self.map_tmx_file_path)
         map_data = pyscroll.data.TiledMapData(tmx_data)
         map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
-        map_layer.zoom = 2.5
+        map_layer.zoom = self.map_zoom
 
         # Create player
         player_position = tmx_data.get_object_by_name("player_spawn_point")
         self.player = Player(player_position.x, player_position.y)
-        self.player_state = "alive"
 
-        # Create special area on the map
-        self.collision_areas = []
-        self.death_areas = []
-        self.fall_areas = []
+        # Create specials areas on the map
         for obj in tmx_data.objects:
             # Create collision_areas
             if obj.type == "collision":
@@ -56,7 +69,7 @@ class Game:
     def handle_input(self):
         pressed = pygame.key.get_pressed()
 
-        # Animate the sprite when the player move in a certain direction
+        # Move and animate the sprite when the player move in a certain direction
         if self.player_state == "alive":
             if pressed[KEY_UP] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_DOWN]:
                 self.player.move_up()
@@ -125,5 +138,5 @@ class Game:
             # Fill the empty part of the screen with black
             self.screen.fill('black')
 
-            # Manage FPS
+            # Set Frame Per Second
             self.clock.tick(FPS)

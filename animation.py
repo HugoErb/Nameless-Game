@@ -8,7 +8,7 @@ class AnimateSprite(pygame.sprite.Sprite):
 
         # Animations setup
         self.last_animation = "none"
-        self.animation_finished = "false"
+        self.animation_finished = False
         self.size = 54
         self.current_image = 0
 
@@ -25,12 +25,12 @@ class AnimateSprite(pygame.sprite.Sprite):
 
     def animate(self, animation_type):
         # We only launch the method if the animation is not finished
-        if self.animation_finished == "false":
+        if not self.animation_finished:
             # Reset loop index for new animation launched
             if animation_type != self.last_animation:
                 self.last_animation = animation_type
                 self.current_image = 0
-                self.animation_finished = "false"
+                self.animation_finished = False
 
             # Animation speed
             self.clock += self.speed * 8.5
@@ -44,7 +44,7 @@ class AnimateSprite(pygame.sprite.Sprite):
                     if self.current_image + 1 < len(self.images[animation_type]):
                         self.current_image += 1
                     else:
-                        self.animation_finished = "true"
+                        self.animation_finished = True
                 # Reset animation loop
                 if self.current_image >= len(self.images[animation_type]) and animation_type != "death":
                     self.current_image = 0
@@ -60,12 +60,12 @@ class AnimateSprite(pygame.sprite.Sprite):
                 if self.size > 0:
                     self.size -= 0.5
                 else:
-                    self.animation_finished = "true"
+                    self.animation_finished = True
 
-            if self.animation_finished == "true":
-                return "true"
+            if self.animation_finished:
+                return True
             else:
-                return "false"
+                return False
 
     def stop_animation(self, last_animation):
         self.current_image = 0

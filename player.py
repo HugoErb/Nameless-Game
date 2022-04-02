@@ -99,16 +99,17 @@ class Player(animation.AnimateSprite):
             while self.health > 0:
                 self.health -= 1
             print("Player is dead")
+            self.state = "dead"
         if make_animation == "true":
             self.animate("death")
 
     def fall(self):
         if self.state != "dead":
             result = self.animate("fall")
-            if result == "true":
+            if result:
                 self.state = "dead"
-        else:
             print("Player has fallen")
+        else:
             self.die("false")
 
     def update(self):
