@@ -1,10 +1,8 @@
 import sys
 
-import pyscroll
-import pytmx
-
 from player import Player
 from settings import *
+from src.map import MapManager
 
 
 class Game:
@@ -19,16 +17,6 @@ class Game:
         self.window_name = WINDOW_NAME
         self.window_icon_path = WINDOW_ICON_PATH
 
-        # Map setup
-        self.map_zoom = MAP_ZOOM
-        self.map_tmx_file_path = "./graphics/map/map.tmx"
-        self.collision_areas = []
-        self.death_areas = []
-        self.fall_areas = []
-
-        # Player setup
-        self.player_state = "alive"
-
         ###################################################################
 
         # Window setup
@@ -37,32 +25,9 @@ class Game:
         pygame.display.set_caption(self.window_name)
         pygame.display.set_icon(icon)
 
-        # Load TMX map
-        tmx_data = pytmx.util_pygame.load_pygame(self.map_tmx_file_path)
-        map_data = pyscroll.data.TiledMapData(tmx_data)
-        map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
-        map_layer.zoom = self.map_zoom
-        self.nb_layer = len(tmx_data.layers)
-
         # Create player
-        player_position = tmx_data.get_object_by_name(PLAYER_SPAWN_POINT)
-        self.player = Player(player_position.x, player_position.y)
-
-        # Create specials areas on the map
-        for obj in tmx_data.objects:
-            # Create collision_areas
-            if obj.type == "collision":
-                self.collision_areas.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
-            # Create death areas
-            elif obj.type == "death":
-                self.death_areas.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
-            # Create fall areas
-            elif obj.type == "fall":
-                self.fall_areas.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
-
-        # Draw layer group
-        self.group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=self.nb_layer - 3)
-        self.group.add(self.player)
+        self.player = Player(0, 0)
+        self.map_manager = MapManager(self.screen, self.player)
 
         self.clock = pygame.time.Clock()
 
@@ -71,7 +36,7 @@ class Game:
         pressed = pygame.key.get_pressed()
 
         # Move and animate the sprite when the player move in a certain direction
-        if self.player_state == "alive":
+        if self.player.state == "alive":
             if pressed[KEY_UP] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_DOWN]:
                 self.player.move_up()
             elif pressed[KEY_DOWN] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_UP]:
@@ -94,22 +59,7 @@ class Game:
                 self.player.not_moving()
 
     def update(self):
-        self.group.update()
-
-        for sprite in self.group.sprites():
-            # Check for collision
-            if sprite.feet.collidelist(self.collision_areas) > -1:
-                sprite.move_back()
-
-            # Check if walking in death areas
-            if sprite.feet.collidelist(self.death_areas) > -1:
-                sprite.die("true")
-                self.player_state = "dead"
-
-            # Check if walking in fall areas
-            if sprite.feet.collidelist(self.fall_areas) > -1 or self.player_state == "falling":
-                self.player_state = "falling"
-                sprite.fall()
+        self.map_manager.update()
 
     def run(self):
         # While the game is running
@@ -125,18 +75,18 @@ class Game:
             self.update()
 
             # Center camera on player
-            if self.player_state != "falling":
-                self.group.center(self.player.rect.center)
+            if self.player.state == "alive":
+                self.map_manager.center_camera()
 
             # Draw layer on screen
-            self.group.draw(self.screen)
+            self.map_manager.draw()
             pygame.display.flip()
 
             # Game is closed if the player close the game window
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.game_is_running = False
                     print('Game closed')
+                    self.game_is_running = False
                     pygame.quit()
                     sys.exit()
 

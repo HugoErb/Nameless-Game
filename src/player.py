@@ -7,7 +7,7 @@ from audio import Audio
 class Player(animation.AnimateSprite):
 
     def __init__(self, x, y):
-        super().__init__("player", "characters")
+        super().__init__("skeleton", "characters")
 
         # Set player position
         self.rect = self.image.get_rect()
@@ -17,7 +17,7 @@ class Player(animation.AnimateSprite):
         self.last_animation = "walking_down"
 
         # Initialize feet of the player, for better collisions and effects
-        self.feet = pygame.Rect(0, 0, self.rect.width * 0.5, 12)
+        self.feet = pygame.Rect(0, 0, self.rect.width * 0.5, 10)
         self.old_position = self.position.copy()
 
         # Player stats
@@ -82,7 +82,7 @@ class Player(animation.AnimateSprite):
 
     def move_back(self):
         # print("Collision")
-        Audio("collision", "sounds", 0.5)
+        Audio("collision", "sounds", 0.4)
         self.position = self.old_position
         self.rect.center = self.position
         self.feet.midbottom = self.rect.midbottom
