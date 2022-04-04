@@ -32,9 +32,6 @@ class MapManager:
         self.current_map = "world"
         self.screen = screen
         self.player = player
-        self.collision_areas = []
-        self.death_areas = []
-        self.falling_areas = []
 
         self.register_map("world", portals=[
             Portal(from_world="world", origin_point="enter_house", destination_world="house",
@@ -66,16 +63,16 @@ class MapManager:
         # Check if walking in a certain area in the current map
         for sprite in self.get_group().sprites():
             # Check for collision
-            if sprite.feet.collidelist(self.collision_areas) > -1:
+            if sprite.feet.collidelist(self.get_walls()) > -1:
                 sprite.move_back()
 
             # Check if walking in death areas
-            if sprite.feet.collidelist(self.death_areas) > -1:
+            if sprite.feet.collidelist(self.get_death_areas()) > -1:
                 sprite.die("true")
                 sprite.state = "dead"
 
             # Check if walking in fall areas
-            if sprite.feet.collidelist(self.falling_areas) > -1 or sprite.state == "falling":
+            if sprite.feet.collidelist(self.get_falling_areas()) > -1 or sprite.state == "falling":
                 sprite.state = "falling"
                 sprite.fall()
 
@@ -88,26 +85,30 @@ class MapManager:
 
         map_layer.zoom = MAP_ZOOM
         nb_layer = len(tmx_data.layers)
+        print(nb_layer)
 
         # Create specials areas on the map
+        walls = []
+        death_areas = []
+        falling_areas = []
+
         for obj in tmx_data.objects:
             # Create collision_areas
             if obj.type == "collision":
-                self.collision_areas.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
+                walls.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
             # Create death areas
             elif obj.type == "death":
-                self.death_areas.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
+                death_areas.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
             # Create fall areas
             elif obj.type == "fall":
-                self.falling_areas.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
+                falling_areas.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
 
         # Draw layer group
         group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=nb_layer - 3)
         group.add(self.player)
 
         # Create map instance
-        self.maps[map_name] = Map(map_name, self.collision_areas, self.death_areas, self.falling_areas, group,
-                                  tmx_data, portals)
+        self.maps[map_name] = Map(map_name, walls, death_areas, falling_areas, group, tmx_data, portals)
 
     def get_map(self):
         return self.maps[self.current_map]

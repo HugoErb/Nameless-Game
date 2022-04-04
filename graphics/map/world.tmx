@@ -501,7 +501,7 @@
   <object id="101" type="collision" x="643.75" y="800" width="58.25" height="159.5"/>
   <object id="102" type="collision" x="738" y="800" width="57.5" height="159"/>
   <object id="103" type="collision" x="702" y="799.75" width="36" height="96.25"/>
-  <object id="104" name="spawn_ point_from_house" x="719.5" y="989.5">
+  <object id="104" name="spawn_point_from_house" x="719.833" y="974.833">
    <point/>
   </object>
  </objectgroup>

@@ -7,7 +7,7 @@ from audio import Audio
 class Player(animation.AnimateSprite):
 
     def __init__(self, x, y):
-        super().__init__("skeleton", "characters")
+        super().__init__("player", "characters")
 
         # Set player position
         self.rect = self.image.get_rect()
