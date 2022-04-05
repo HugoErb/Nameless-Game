@@ -13,7 +13,7 @@ class AnimateSprite(pygame.sprite.Sprite):
         self.current_image = 0
 
         # Load sprite
-        self.image = pygame.image.load(f"graphics/{sprite_type}/{sprite_name}.png")
+        self.image = pygame.image.load(f"../graphics/{sprite_type}/{sprite_name}.png")
         self.image = get_image(0, 128, self.image)
         self.image.set_colorkey(0, 0)
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
@@ -26,6 +26,7 @@ class AnimateSprite(pygame.sprite.Sprite):
     def animate(self, animation_type):
         # We only launch the method if the animation is not finished
         if not self.animation_finished:
+
             # Reset loop index for new animation launched
             if animation_type != self.last_animation:
                 self.last_animation = animation_type
@@ -40,13 +41,16 @@ class AnimateSprite(pygame.sprite.Sprite):
                 # Modify current animation
                 if animation_type != "death":
                     self.current_image += 1
-                elif animation_type == "death":
+                elif animation_type == "death" or animation_type.startswith("attacking"):
                     if self.current_image + 1 < len(self.images[animation_type]):
                         self.current_image += 1
                     else:
                         self.animation_finished = True
+                        print("L'animation " + animation_type + " est terminée.")
                 # Reset animation loop
-                if self.current_image >= len(self.images[animation_type]) and animation_type != "death":
+                if self.current_image >= len(
+                        self.images[animation_type]) and (
+                        animation_type != "death" or animation_type.startswith("attacking")):
                     self.current_image = 0
                 self.clock = 0
 
@@ -84,8 +88,12 @@ def load_animation_images(sprite_name, sprite_type):
         "walking_down": [],
         "death": [],
         "fall": [],
+        "attacking_left": [],
+        "attacking_right": [],
+        "attacking_up": [],
+        "attacking_down": []
     }
-    sprite = pygame.image.load(f"graphics/{sprite_type}/{sprite_name}.png")
+    sprite = pygame.image.load(f"../graphics/{sprite_type}/{sprite_name}.png")
 
     # Walking animation
     for i in range(0, 4):
@@ -109,6 +117,19 @@ def load_animation_images(sprite_name, sprite_type):
     for i in range(0, 2):
         img_list = get_image((320 + 64 * i), 128, sprite)
         images["fall"].append(img_list)
+
+    # Attacking animation
+    for i in range(0, 4):
+        for j in range(0, 6):
+            img_list = get_image((64 * j), (768 + 64 * i), sprite)
+            if i == 0:
+                images["attacking_up"].append(img_list)
+            elif i == 1:
+                images["attacking_left"].append(img_list)
+            elif i == 2:
+                images["attacking_down"].append(img_list)
+            elif i == 3:
+                images["attacking_right"].append(img_list)
 
     return images
 

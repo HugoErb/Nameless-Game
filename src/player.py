@@ -25,6 +25,7 @@ class Player(animation.AnimateSprite):
         self.stamina = 100
         self.attack = 20
         self.state = "alive"
+        self.attacking_animation_is_finished = True
 
     # Moving methods #####################################################
 
@@ -91,7 +92,31 @@ class Player(animation.AnimateSprite):
         # print("Not Moving")
         self.stop_animation(self.last_animation)
 
-    ######################################################################
+    def attacking(self):
+        if self.attacking_animation_is_finished:
+            self.attacking_animation_is_finished = False
+            slash_sounds = ["slash", "slash2"]
+            # Audio(random.choice(slash_sounds), "sounds", 0.4)
+
+            # Set the attacking direction
+            attacking_direction = "attacking_down"
+            if self.last_animation == "walking_up":
+                attacking_direction = "attacking_up"
+                print("Attacking up")
+            elif self.last_animation == "walking_down":
+                attacking_direction = "attacking_down"
+                print("Attacking down")
+            elif self.last_animation == "walking_left":
+                attacking_direction = "attacking_left"
+                print("Attacking Left")
+            elif self.last_animation == "walking_right":
+                attacking_direction = "attacking_right"
+                print("Attacking Right")
+
+            while not self.attacking_animation_is_finished:
+                self.attacking_animation_is_finished = self.animate(attacking_direction)
+
+        ######################################################################
 
     def die(self, make_animation):
         if self.health > 0:

@@ -9,7 +9,7 @@ class Audio:
         pygame.mixer.init()
 
         # Loading the song
-        pygame.mixer.music.load(f"audios/{sound_type}/{sound_name}.mp3")
+        pygame.mixer.music.load(f"../audios/{sound_type}/{sound_name}.mp3")
 
         # Setting the volume
         pygame.mixer.music.set_volume(volume)

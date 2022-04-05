@@ -79,7 +79,7 @@ class MapManager:
     def register_map(self, map_name, portals=[]):
 
         # Load TMX map
-        tmx_data = pytmx.util_pygame.load_pygame(f"./graphics/map/{map_name}.tmx")
+        tmx_data = pytmx.util_pygame.load_pygame(f"../graphics/map/{map_name}.tmx")
         map_data = pyscroll.data.TiledMapData(tmx_data)
         map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
 

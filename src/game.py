@@ -17,8 +17,6 @@ class Game:
         self.window_name = WINDOW_NAME
         self.window_icon_path = WINDOW_ICON_PATH
 
-        ###################################################################
-
         # Window setup
         icon = pygame.image.load(self.window_icon_path)
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGTH))
@@ -35,9 +33,14 @@ class Game:
     def handle_input(self):
         pressed = pygame.key.get_pressed()
 
-        # Move and animate the sprite when the player move in a certain direction
         if self.player.state == "alive":
-            if pressed[KEY_UP] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_DOWN]:
+
+            # Attacking animation
+            if pressed[KEY_ATTACKING]:
+                self.player.attacking()
+
+            # Move and animate the sprite when the player move in a certain direction
+            elif pressed[KEY_UP] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_DOWN]:
                 self.player.move_up()
             elif pressed[KEY_DOWN] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_UP]:
                 self.player.move_down()
