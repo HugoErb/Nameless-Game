@@ -1,3 +1,5 @@
+import random
+
 import pygame
 
 import animation
@@ -96,7 +98,7 @@ class Player(animation.AnimateSprite):
         if self.attacking_animation_is_finished:
             self.attacking_animation_is_finished = False
             slash_sounds = ["slash", "slash2"]
-            # Audio(random.choice(slash_sounds), "sounds", 0.4)
+            Audio(random.choice(slash_sounds), "sounds", 0.4)
 
             # Set the attacking direction
             attacking_direction = "attacking_down"
@@ -113,8 +115,7 @@ class Player(animation.AnimateSprite):
                 attacking_direction = "attacking_right"
                 print("Attacking Right")
 
-            while not self.attacking_animation_is_finished:
-                self.attacking_animation_is_finished = self.animate(attacking_direction)
+            self.animate(attacking_direction)
 
         ######################################################################
 
