@@ -26,6 +26,7 @@ class Game:
         # Create player
         self.player = Player(0, 0)
         self.map_manager = MapManager(self.screen, self.player)
+        self.is_attacking = False
 
         self.clock = pygame.time.Clock()
 
@@ -36,30 +37,31 @@ class Game:
         if self.player.state == "alive":
 
             # Attacking animation
-            if pressed[KEY_ATTACKING]:
-                self.player.attacking()
+            if not self.is_attacking:
+                if pressed[KEY_ATTACKING]:
+                    self.player.attacking()
 
-            # Move and animate the sprite when the player move in a certain direction
-            elif pressed[KEY_UP] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_DOWN]:
-                self.player.move_up()
-            elif pressed[KEY_DOWN] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_UP]:
-                self.player.move_down()
-            elif pressed[KEY_LEFT] and not pressed[KEY_UP] and not pressed[KEY_DOWN] and not pressed[KEY_RIGHT]:
-                self.player.move_left()
-            elif pressed[KEY_RIGHT] and not pressed[KEY_UP] and not pressed[KEY_DOWN] and not pressed[KEY_LEFT]:
-                self.player.move_right()
-            elif pressed[KEY_RIGHT] and pressed[KEY_UP]:
-                self.player.move_up_and_right()
-            elif pressed[KEY_LEFT] and pressed[KEY_UP]:
-                self.player.move_up_and_left()
-            elif pressed[KEY_RIGHT] and pressed[KEY_DOWN]:
-                self.player.move_down_and_right()
-            elif pressed[KEY_LEFT] and pressed[KEY_DOWN]:
-                self.player.move_down_and_left()
+                # Move and animate the sprite when the player move in a certain direction
+                elif pressed[KEY_UP] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_DOWN]:
+                    self.player.move_up()
+                elif pressed[KEY_DOWN] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_UP]:
+                    self.player.move_down()
+                elif pressed[KEY_LEFT] and not pressed[KEY_UP] and not pressed[KEY_DOWN] and not pressed[KEY_RIGHT]:
+                    self.player.move_left()
+                elif pressed[KEY_RIGHT] and not pressed[KEY_UP] and not pressed[KEY_DOWN] and not pressed[KEY_LEFT]:
+                    self.player.move_right()
+                elif pressed[KEY_RIGHT] and pressed[KEY_UP]:
+                    self.player.move_up_and_right()
+                elif pressed[KEY_LEFT] and pressed[KEY_UP]:
+                    self.player.move_up_and_left()
+                elif pressed[KEY_RIGHT] and pressed[KEY_DOWN]:
+                    self.player.move_down_and_right()
+                elif pressed[KEY_LEFT] and pressed[KEY_DOWN]:
+                    self.player.move_down_and_left()
 
-            # If the player do not move, reset animation
-            elif not pressed[KEY_UP] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_DOWN]:
-                self.player.not_moving()
+                # If the player do not move, reset animation
+                elif not pressed[KEY_UP] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_DOWN]:
+                    self.player.not_moving()
 
     def update(self):
         self.map_manager.update()

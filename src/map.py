@@ -4,6 +4,7 @@ import pyscroll
 import pytmx
 
 from settings import *
+from src.audio import Audio
 
 
 @dataclass
@@ -69,6 +70,7 @@ class MapManager:
             # Check if walking in death areas
             if sprite.feet.collidelist(self.get_death_areas()) > -1:
                 sprite.die("true")
+                Audio("dying", "sounds", 0.1)
                 sprite.state = "dead"
 
             # Check if walking in fall areas

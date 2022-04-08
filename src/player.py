@@ -95,25 +95,23 @@ class Player(animation.AnimateSprite):
         self.stop_animation(self.last_animation)
 
     def attacking(self):
-        if self.attacking_animation_is_finished:
-            self.attacking_animation_is_finished = False
             slash_sounds = ["slash", "slash2"]
             Audio(random.choice(slash_sounds), "sounds", 0.4)
 
             # Set the attacking direction
             attacking_direction = "attacking_down"
-            if self.last_animation == "walking_up":
+            if self.last_animation == "walking_up" or self.last_animation == "attacking_up":
                 attacking_direction = "attacking_up"
-                print("Attacking up")
-            elif self.last_animation == "walking_down":
+                # print("Attacking up")
+            elif self.last_animation == "walking_down" or self.last_animation == "attacking_down":
                 attacking_direction = "attacking_down"
-                print("Attacking down")
-            elif self.last_animation == "walking_left":
+                # print("Attacking down")
+            elif self.last_animation == "walking_left" or self.last_animation == "attacking_left":
                 attacking_direction = "attacking_left"
-                print("Attacking Left")
-            elif self.last_animation == "walking_right":
+                # print("Attacking Left")
+            elif self.last_animation == "walking_right" or self.last_animation == "attacking_right":
                 attacking_direction = "attacking_right"
-                print("Attacking Right")
+                # print("Attacking Right")
 
             self.animate(attacking_direction)
 

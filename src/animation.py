@@ -34,12 +34,15 @@ class AnimateSprite(pygame.sprite.Sprite):
                 self.animation_finished = False
 
             # Animation speed
-            self.clock += self.speed * 8.5
+            if animation_type.startswith("attacking"):
+                self.clock += self.speed * 10
+            else:
+                self.clock += self.speed * 8.5
 
             # When the clock timer is reached
             if self.clock >= 100:
                 # Modify current animation
-                if animation_type != "death":
+                if animation_type != "death" and not animation_type.startswith("attacking"):
                     self.current_image += 1
                 elif animation_type == "death" or animation_type.startswith("attacking"):
                     if self.current_image + 1 < len(self.images[animation_type]):
@@ -47,10 +50,11 @@ class AnimateSprite(pygame.sprite.Sprite):
                     else:
                         self.animation_finished = True
                         print("L'animation " + animation_type + " est terminée.")
+
                 # Reset animation loop
                 if self.current_image >= len(
                         self.images[animation_type]) and (
-                        animation_type != "death" or animation_type.startswith("attacking")):
+                        animation_type != "death" or not animation_type.startswith("attacking")):
                     self.current_image = 0
                 self.clock = 0
 
