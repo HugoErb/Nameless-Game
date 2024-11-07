@@ -81,13 +81,17 @@ class Player(animation.AnimateSprite):
 
         # Réinitialiser l'animation d'attaque
         self.animation_finished = False
-
+        print(self.last_animation)
         # Dictionnaire de correspondance pour déterminer la direction d'attaque
         attack_directions = {
             "walking_up": "attacking_up",
+            "attacking_up": "attacking_up",
             "walking_down": "attacking_down",
+            "attacking_down": "attacking_down",
             "walking_left": "attacking_left",
+            "attacking_left": "attacking_left",
             "walking_right": "attacking_right",
+            "attacking_right": "attacking_right"
         }
 
         # Utilise la dernière animation pour déterminer la direction d'attaque
