@@ -36,32 +36,44 @@ class Game:
 
         if self.player.state == "alive":
 
-            # Attacking animation
+            # Animation d'attaque
             if not self.is_attacking:
                 if pressed[KEY_ATTACKING]:
                     self.player.attacking()
 
-                # Move and animate the sprite when the player move in a certain direction
-                elif pressed[KEY_UP] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_DOWN]:
-                    self.player.move_up()
-                elif pressed[KEY_DOWN] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_UP]:
-                    self.player.move_down()
-                elif pressed[KEY_LEFT] and not pressed[KEY_UP] and not pressed[KEY_DOWN] and not pressed[KEY_RIGHT]:
-                    self.player.move_left()
-                elif pressed[KEY_RIGHT] and not pressed[KEY_UP] and not pressed[KEY_DOWN] and not pressed[KEY_LEFT]:
-                    self.player.move_right()
-                elif pressed[KEY_RIGHT] and pressed[KEY_UP]:
-                    self.player.move_up_and_right()
-                elif pressed[KEY_LEFT] and pressed[KEY_UP]:
-                    self.player.move_up_and_left()
-                elif pressed[KEY_RIGHT] and pressed[KEY_DOWN]:
-                    self.player.move_down_and_right()
-                elif pressed[KEY_LEFT] and pressed[KEY_DOWN]:
-                    self.player.move_down_and_left()
+                # Gérer le mouvement du joueur
+                else:
+                    self.handle_movement(pressed)
 
-                # If the player do not move, reset animation
-                elif not pressed[KEY_UP] and not pressed[KEY_RIGHT] and not pressed[KEY_LEFT] and not pressed[KEY_DOWN]:
-                    self.player.not_moving()
+                    # Si aucune touche de direction n'est pressée, réinitialiser l'animation
+                    if not any([pressed[KEY_UP], pressed[KEY_DOWN], pressed[KEY_LEFT], pressed[KEY_RIGHT]]):
+                        self.player.not_moving()
+
+    def handle_movement(self, pressed):
+        # Dictionnaire pour gérer la correspondance des touches et des directions
+        directions = {
+            (True, False, False, False): "up",
+            (False, True, False, False): "down",
+            (False, False, True, False): "left",
+            (False, False, False, True): "right",
+            (True, False, False, True): "up_right",
+            (True, False, True, False): "up_left",
+            (False, True, False, True): "down_right",
+            (False, True, True, False): "down_left"
+        }
+
+        # Déterminer la direction en fonction des touches pressées
+        key_state = (
+            pressed[KEY_UP],
+            pressed[KEY_DOWN],
+            pressed[KEY_LEFT],
+            pressed[KEY_RIGHT]
+        )
+
+        # Obtenir la direction à partir du dictionnaire et appeler move si une direction est trouvée
+        direction = directions.get(key_state)
+        if direction:
+            self.player.move(direction)
 
     def update(self):
         self.map_manager.update()

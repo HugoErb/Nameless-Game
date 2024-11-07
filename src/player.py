@@ -28,60 +28,41 @@ class Player(animation.AnimateSprite):
         self.attack = 20
         self.state = "alive"
         self.attacking_animation_is_finished = True
+        # Moving method #####################################################
 
-    # Moving methods #####################################################
+    def move(self, direction):
+        # Définition des vecteurs de mouvement pour chaque direction
+        directions = {
+            "right": (1, 0),
+            "left": (-1, 0),
+            "up": (0, -1),
+            "down": (0, 1),
+            "up_right": (0.8, -0.8),
+            "up_left": (-0.8, -0.8),
+            "down_right": (0.8, 0.8),
+            "down_left": (-0.8, 0.8)
+        }
 
-    def move_right(self):
-        # print("Moving Right")
-        self.animate("walking_right")
-        self.last_animation = "walking_right"
-        self.position[0] += self.speed
+        # Récupération du vecteur correspondant à la direction
+        dx, dy = directions.get(direction, (0, 0))
 
-    def move_left(self):
-        # print("Moving Left")
-        self.animate("walking_left")
-        self.last_animation = "walking_left"
-        self.position[0] -= self.speed
+        # Définir l'animation en fonction de la direction
+        if "right" in direction:
+            self.animate("walking_right")
+            self.last_animation = "walking_right"
+        elif "left" in direction:
+            self.animate("walking_left")
+            self.last_animation = "walking_left"
+        elif "up" in direction:
+            self.animate("walking_up")
+            self.last_animation = "walking_up"
+        elif "down" in direction:
+            self.animate("walking_down")
+            self.last_animation = "walking_down"
 
-    def move_up(self):
-        # print("Moving Up")
-        self.animate("walking_up")
-        self.last_animation = "walking_up"
-        self.position[1] -= self.speed
-
-    def move_down(self):
-        # print("Moving Down")
-        self.animate("walking_down")
-        self.last_animation = "walking_down"
-        self.position[1] += self.speed
-
-    def move_up_and_right(self):
-        # print("Moving Up and Right")
-        self.animate("walking_up")
-        self.last_animation = "walking_up"
-        self.position[1] -= self.speed * 0.8
-        self.position[0] += self.speed * 0.8
-
-    def move_up_and_left(self):
-        # print("Moving Up and Left")
-        self.animate("walking_up")
-        self.last_animation = "walking_up"
-        self.position[1] -= self.speed * 0.8
-        self.position[0] -= self.speed * 0.8
-
-    def move_down_and_right(self):
-        # print("Moving Down and Right")
-        self.animate("walking_down")
-        self.last_animation = "walking_down"
-        self.position[1] += self.speed * 0.8
-        self.position[0] += self.speed * 0.8
-
-    def move_down_and_left(self):
-        # print("Moving Down and Left")
-        self.animate("walking_down")
-        self.last_animation = "walking_down"
-        self.position[1] += self.speed * 0.8
-        self.position[0] -= self.speed * 0.8
+        # Mise à jour de la position
+        self.position[0] += dx * self.speed
+        self.position[1] += dy * self.speed
 
     def move_back(self):
         # print("Collision")
@@ -95,25 +76,25 @@ class Player(animation.AnimateSprite):
         self.stop_animation(self.last_animation)
 
     def attacking(self):
-            slash_sounds = ["slash", "slash2"]
-            Audio(random.choice(slash_sounds), "sounds", 0.4)
+        slash_sounds = ["slash", "slash2"]
+        Audio(random.choice(slash_sounds), "sounds", 0.4)
 
-            # Set the attacking direction
-            attacking_direction = "attacking_down"
-            if self.last_animation == "walking_up" or self.last_animation == "attacking_up":
-                attacking_direction = "attacking_up"
-                # print("Attacking up")
-            elif self.last_animation == "walking_down" or self.last_animation == "attacking_down":
-                attacking_direction = "attacking_down"
-                # print("Attacking down")
-            elif self.last_animation == "walking_left" or self.last_animation == "attacking_left":
-                attacking_direction = "attacking_left"
-                # print("Attacking Left")
-            elif self.last_animation == "walking_right" or self.last_animation == "attacking_right":
-                attacking_direction = "attacking_right"
-                # print("Attacking Right")
+        # Réinitialiser l'animation d'attaque
+        self.animation_finished = False
 
-            self.animate(attacking_direction)
+        # Dictionnaire de correspondance pour déterminer la direction d'attaque
+        attack_directions = {
+            "walking_up": "attacking_up",
+            "walking_down": "attacking_down",
+            "walking_left": "attacking_left",
+            "walking_right": "attacking_right",
+        }
+
+        # Utilise la dernière animation pour déterminer la direction d'attaque
+        attacking_direction = attack_directions.get(self.last_animation, "attacking_down")
+
+        # Lance l'animation d'attaque dans la direction déterminée
+        self.animate(attacking_direction)
 
         ######################################################################
 
