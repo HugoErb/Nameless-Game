@@ -50,6 +50,12 @@ class Game:
                         self.player.not_moving()
 
     def handle_movement(self, pressed):
+        # Vérification des touches opposées
+        if (pressed[KEY_LEFT] and pressed[KEY_RIGHT]) or (pressed[KEY_UP] and pressed[KEY_DOWN]):
+            # Si les touches opposées sont pressées, arrêter le mouvement
+            self.player.not_moving()
+            return
+
         # Dictionnaire pour gérer la correspondance des touches et des directions
         directions = {
             (True, False, False, False): "up",
@@ -74,6 +80,9 @@ class Game:
         direction = directions.get(key_state)
         if direction:
             self.player.move(direction)
+        else:
+            # Si aucune direction valide n'est détectée, arrêter le mouvement
+            self.player.not_moving()
 
     def update(self):
         self.map_manager.update()
