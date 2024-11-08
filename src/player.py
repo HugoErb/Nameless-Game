@@ -18,6 +18,9 @@ class Player(animation.AnimateSprite):
         # Last animation of player
         self.last_animation = "walking_down"
 
+        # Last animation of player before falling
+        self.last_animation_before_falling = ""
+
         # Initialize feet of the player, for better collisions and effects
         self.feet = pygame.Rect(0, 0, self.rect.width * 0.5, 10)
         self.old_position = self.position.copy()
@@ -28,7 +31,8 @@ class Player(animation.AnimateSprite):
         self.attack = 20
         self.state = "alive"
         self.attacking_animation_is_finished = True
-        # Moving method #####################################################
+
+    # Moving method #####################################################
 
     def move(self, direction):
         # Définition des vecteurs de mouvement pour chaque direction
@@ -113,15 +117,43 @@ class Player(animation.AnimateSprite):
             self.animate("death")
 
     def fall(self):
+        """
+        Gère l'animation de chute et fait en sorte que le joueur continue légèrement son mouvement
+        dans la dernière direction de marche avant de basculer dans l'état 'dead'.
+
+        Lorsque la taille du sprite diminue, le joueur est progressivement déplacé pour compenser cette réduction.
+        Si la chute est terminée, l'état passe à 'dead'.
+        """
+        if (self.last_animation_before_falling == ""):
+            self.last_animation_before_falling = self.last_animation
+
         if self.state != "dead":
-            # Animate the falling
+            # Animation de la chute
             result = self.animate("fall")
             if result:
                 self.state = "dead"
-            # Move the player to compensate the size reduction
-            self.position[1] += 0.25
+
+            # Compense la réduction de taille en ajustant la position
             self.position[0] += 0.25
+            self.position[1] += 0.25
+
+            # Application d'une continuation de mouvement plus marquée dans la dernière direction
+            move_offsets = {
+                "walking_right": (0.25, 0),
+                "walking_left": (-0.25, 0),
+                "walking_up": (0, -0.1),
+                "walking_down": (0, 0.3),
+                "walking_up_right": (0.5, -0.5),
+                "walking_up_left": (-0.5, -0.5),
+                "walking_down_right": (0.5, 0.5),
+                "walking_down_left": (-0.5, 0.5)
+            }
+            dx, dy = move_offsets.get(self.last_animation_before_falling, (0, 0))
+            self.position[0] += dx
+            self.position[1] += dy
+
         else:
+            # Vérifie si le joueur a encore de la vie pour déclencher la mort
             if self.health > 0:
                 print("Player has fallen")
                 self.die("false")

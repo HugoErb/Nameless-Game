@@ -35,7 +35,7 @@ class AnimateSprite(pygame.sprite.Sprite):
 
             # Animation speed
             if animation_type.startswith("attacking"):
-                self.clock += self.speed * 10
+                self.clock += self.speed * 50
             else:
                 self.clock += self.speed * 8.5
 
@@ -85,60 +85,58 @@ class AnimateSprite(pygame.sprite.Sprite):
 
 
 def load_animation_images(sprite_name, sprite_type):
-    images = {
-        "walking_left": [],
-        "walking_right": [],
-        "walking_up": [],
-        "walking_down": [],
-        "death": [],
-        "fall": [],
-        "attacking_left": [],
-        "attacking_right": [],
-        "attacking_up": [],
-        "attacking_down": []
-    }
+    """
+    Charge et organise les images d'animation pour un sprite donné dans des catégories spécifiques.
+
+    Args:
+        sprite_name (str): Le nom du sprite (fichier d'image sans extension).
+        sprite_type (str): Le type de sprite (chemin du dossier relatif).
+
+    Returns:
+        dict: Un dictionnaire contenant des listes d'images organisées par type et direction d'animation.
+    """
+    # Initialisation des types d'animations et directions
+    images = {key: [] for key in ["walking_left", "walking_right", "walking_up", "walking_down",
+                                  "death", "fall", "attacking_left", "attacking_right",
+                                  "attacking_up", "attacking_down"]}
+
+    # Chargement de la feuille de sprite
     sprite = pygame.image.load(f"../graphics/{sprite_type}/{sprite_name}.png")
 
-    # Walking animation
-    for i in range(0, 4):
-        for j in range(0, 9):
-            img_list = get_image((64 * j), (512 + 64 * i), sprite)
-            if i == 0:
-                images["walking_up"].append(img_list)
-            elif i == 1:
-                images["walking_left"].append(img_list)
-            elif i == 2:
-                images["walking_down"].append(img_list)
-            elif i == 3:
-                images["walking_right"].append(img_list)
+    # Mapping des directions pour la marche et l'attaque
+    directions = ["up", "left", "down", "right"]
 
-    # Death animation
-    for i in range(0, 6):
-        img_list = get_image((64 * i), 1280, sprite)
-        images["death"].append(img_list)
+    # Chargement des images de marche
+    for i, direction in enumerate(directions):
+        for j in range(9):
+            images[f"walking_{direction}"].append(get_image(64 * j, 512 + 64 * i, sprite))
 
-    # Falling animation
-    for i in range(0, 2):
-        img_list = get_image((320 + 64 * i), 128, sprite)
-        images["fall"].append(img_list)
+    # Chargement des images de mort
+    images["death"] = [get_image(64 * i, 1280, sprite) for i in range(6)]
 
-    # Attacking animation
-    for i in range(0, 4):
-        for j in range(0, 6):
-            img_list = get_image((64 * j), (768 + 64 * i), sprite)
-            if i == 0:
-                images["attacking_up"].append(img_list)
-            elif i == 1:
-                images["attacking_left"].append(img_list)
-            elif i == 2:
-                images["attacking_down"].append(img_list)
-            elif i == 3:
-                images["attacking_right"].append(img_list)
+    # Chargement des images de chute
+    images["fall"] = [get_image(320 + 64 * i, 128, sprite) for i in range(2)]
+
+    # Chargement des images d'attaque
+    for i, direction in enumerate(directions):
+        for j in range(6):
+            images[f"attacking_{direction}"].append(get_image(64 * j, 768 + 64 * i, sprite))
 
     return images
 
 
 def get_image(x, y, sprite):
-    image = pygame.Surface([64, 64])
-    image.blit(sprite, (0, 0), (x, y, 64, 64))
+    """
+    Extrait une image de 64x64 pixels à partir de la feuille de sprite.
+
+    Args:
+        x (int): La coordonnée x du coin supérieur gauche de l'image dans la feuille de sprite.
+        y (int): La coordonnée y du coin supérieur gauche de l'image dans la feuille de sprite.
+        sprite (pygame.Surface): La feuille de sprite à partir de laquelle extraire l'image.
+
+    Returns:
+        pygame.Surface: Une surface Pygame contenant l'image extraite de 64x64 pixels.
+    """
+    # Créer une surface optimisée avec le même format que la feuille de sprite pour un meilleur rendu
+    image = sprite.subsurface((x, y, 64, 64)).copy()
     return image

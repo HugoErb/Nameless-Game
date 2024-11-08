@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2067cb85-5f36-44b7-9ea7-6ebc86b0d401" name="Changes" comment="Ajout des slashs sounds">
-      <change beforePath="$PROJECT_DIR$/.idea/Nameless Game.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Nameless Game.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="2067cb85-5f36-44b7-9ea7-6ebc86b0d401" name="Changes" comment="Fix attaque sur les cotés en en haut">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/game.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/animation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/animation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/player.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -17,20 +15,21 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "HugoErb"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;HugoErb&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/HugoErb/Nameless-Game.git",
-    "accountId": "1b1743cd-0adf-4119-85f8-d55e4bb3ab5c"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/HugoErb/Nameless-Game.git&quot;,
+    &quot;accountId&quot;: &quot;1b1743cd-0adf-4119-85f8-d55e4bb3ab5c&quot;
   }
-}]]></component>
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -104,7 +103,23 @@
       <option name="project" value="LOCAL" />
       <updated>1649187060705</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Optimisations des mouvements et fix un peu l'attaque">
+      <option name="closed" value="true" />
+      <created>1731016060322</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1731016060322</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Fix attaque sur les cotés en en haut">
+      <option name="closed" value="true" />
+      <created>1731016689095</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1731016689095</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -121,7 +136,9 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Ajout des slashs sounds" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ajout des slashs sounds" />
+    <MESSAGE value="Optimisations des mouvements et fix un peu l'attaque" />
+    <MESSAGE value="Fix attaque sur les cotés en en haut" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix attaque sur les cotés en en haut" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
