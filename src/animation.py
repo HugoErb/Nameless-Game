@@ -24,56 +24,82 @@ class AnimateSprite(pygame.sprite.Sprite):
         self.speed = 1.1
 
     def animate(self, animation_type):
-        # We only launch the method if the animation is not finished
+        # Lance uniquement l'animation si elle n'est pas terminée
+        print(animation_type)
         if not self.animation_finished:
-
-            # Reset loop index for new animation launched
+            # Réinitialise l'index de la boucle pour une nouvelle animation
             if animation_type != self.last_animation:
-                self.last_animation = animation_type
-                self.current_image = 0
-                self.animation_finished = False
+                self.reset_animation(animation_type)
 
-            # Animation speed
+            # Appelle la méthode spécifique en fonction du type d'animation
             if animation_type.startswith("attacking"):
-                self.clock += self.speed * 50
+                return self.animate_attacking(animation_type)
+            elif animation_type == "death":
+                return self.animate_death()
+            elif animation_type == "fall":
+                return self.animate_fall()
             else:
-                self.clock += self.speed * 8.5
+                return self.animate_standard(animation_type)
 
-            # When the clock timer is reached
-            if self.clock >= 100:
-                # Modify current animation
-                if animation_type != "death" and not animation_type.startswith("attacking"):
-                    self.current_image += 1
-                elif animation_type == "death" or animation_type.startswith("attacking"):
-                    if self.current_image + 1 < len(self.images[animation_type]):
-                        self.current_image += 1
-                    else:
-                        self.animation_finished = True
-                        print("L'animation " + animation_type + " est terminée.")
+    def reset_animation(self, animation_type):
+        """Réinitialise les paramètres d'animation pour une nouvelle animation"""
+        self.last_animation = animation_type
+        self.current_image = 0
+        self.animation_finished = False
+        self.clock = 0
 
-                # Reset animation loop
-                if self.current_image >= len(
-                        self.images[animation_type]) and (
-                        animation_type != "death" or not animation_type.startswith("attacking")):
-                    self.current_image = 0
-                self.clock = 0
-
-            # Transform the sprite
-            self.image = self.images[animation_type][self.current_image]
-            self.image = pygame.transform.scale(self.image, (self.size, self.size))
-            self.image.set_colorkey(0, 0)
-
-            # Decrease sprite size gradually in the fall case
-            if animation_type == "fall":
-                if self.size > 0:
-                    self.size -= 0.5
-                else:
-                    self.animation_finished = True
-
-            if self.animation_finished:
-                return True
+    def animate_attacking(self, animation_type):
+        """Animation spécifique pour les attaques"""
+        self.clock += self.speed * 15
+        if self.clock >= 100:
+            if self.current_image + 1 < len(self.images[animation_type]):
+                self.current_image += 1
             else:
-                return False
+                self.animation_finished = True
+                print(f"L'animation {animation_type} est terminée.")
+            self.clock = 0
+        self.update_image(animation_type)
+        return self.animation_finished
+
+    def animate_death(self):
+        """Animation spécifique pour la mort"""
+        self.clock += self.speed * 8.5
+        if self.clock >= 100:
+            if self.current_image + 1 < len(self.images["death"]):
+                self.current_image += 1
+            else:
+                self.animation_finished = True
+                print("L'animation de mort est terminée.")
+            self.clock = 0
+        self.update_image("death")
+        return self.animation_finished
+
+    def animate_fall(self):
+        """Animation spécifique pour la chute"""
+        self.clock += self.speed * 8.5
+        if self.clock >= 100:
+            if self.size > 0:
+                self.size -= 0.5
+            else:
+                self.animation_finished = True
+            self.clock = 0
+        self.update_image("fall")
+        return self.animation_finished
+
+    def animate_standard(self, animation_type):
+        """Animation standard pour les autres actions"""
+        self.clock += self.speed * 8.5
+        if self.clock >= 100:
+            self.current_image = (self.current_image + 1) % len(self.images[animation_type])
+            self.clock = 0
+        self.update_image(animation_type)
+        return self.animation_finished
+
+    def update_image(self, animation_type):
+        """Met à jour l'image et applique la transformation"""
+        self.image = self.images[animation_type][self.current_image]
+        self.image = pygame.transform.scale(self.image, (self.size, self.size))
+        self.image.set_colorkey(0, 0)
 
     def stop_animation(self, last_animation):
         self.current_image = 0

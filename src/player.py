@@ -30,12 +30,11 @@ class Player(animation.AnimateSprite):
         self.stamina = 100
         self.attack = 20
         self.state = "alive"
-        self.attacking_animation_is_finished = True
+        self.is_attacking = False
 
     # Moving method #####################################################
 
     def move(self, direction):
-        if self.attacking_animation_is_finished == True:
             # Définition des vecteurs de mouvement pour chaque direction
             directions = {
                 "right": (1, 0),
@@ -80,30 +79,42 @@ class Player(animation.AnimateSprite):
         # print("Not Moving")
         self.stop_animation(self.last_animation)
 
+    def start_attack(self):
+        """Démarre l'animation d'attaque si elle n'est pas déjà en cours."""
+        if not self.is_attacking:
+            slash_sounds = ["slash", "slash2"]
+            Audio(random.choice(slash_sounds), "sounds", 0.4)
+            self.is_attacking = True
+            self.attacking()
+
     def attacking(self):
-        slash_sounds = ["slash", "slash2"]
-        Audio(random.choice(slash_sounds), "sounds", 0.4)
+        """Lance ou continue l'animation d'attaque."""
+        if self.is_attacking:
+            # Déterminer la direction d'attaque en fonction de la dernière animation
+            attack_directions = {
+                "walking_up": "attacking_up",
+                "attacking_up": "attacking_up",
+                "walking_down": "attacking_down",
+                "attacking_down": "attacking_down",
+                "walking_left": "attacking_left",
+                "attacking_left": "attacking_left",
+                "walking_right": "attacking_right",
+                "attacking_right": "attacking_right"
+            }
+            attacking_direction = attack_directions.get(self.last_animation, "attacking_down")
 
-        # L'attaque commence
-        self.attacking_animation_is_finished = False
+            # Exécute l'animation d'attaque
+            self.animation_finished = self.animate(attacking_direction)
 
-        # On utilise la dernière animation pour déterminer la direction d'attaque
-        attack_directions = {
-            "walking_up": "attacking_up",
-            "attacking_up": "attacking_up",
-            "walking_down": "attacking_down",
-            "attacking_down": "attacking_down",
-            "walking_left": "attacking_left",
-            "attacking_left": "attacking_left",
-            "walking_right": "attacking_right",
-            "attacking_right": "attacking_right"
-        }
-        attacking_direction = attack_directions.get(self.last_animation, "attacking_down")
+            # Fin de l'attaque : on repasse sur l'animation de marche dans la même direction
+            # (reset_animation remet aussi animation_finished à False, sinon animate() reste bloqué)
+            if self.animation_finished:
+                self.is_attacking = False
+                self.reset_animation(attacking_direction.replace("attacking", "walking"))
 
-        # Lance l'animation d'attaque dans la direction déterminée
-        self.animate(attacking_direction)
-
-        self.attacking_animation_is_finished = True
+    def is_attacking_finished(self):
+        """Renvoie True si l'animation d'attaque est terminée, sinon False"""
+        return self.animation_finished
 
         ######################################################################
 

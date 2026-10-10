@@ -4,7 +4,7 @@ import pyscroll
 import pytmx
 
 from settings import *
-from src.audio import Audio
+from audio import Audio
 
 
 @dataclass

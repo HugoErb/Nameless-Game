@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2067cb85-5f36-44b7-9ea7-6ebc86b0d401" name="Changes" comment="Optimisation du chargement des sprites + animation d'attaque x50 + ajout d'une continuité de mouvement quand on tombe">
+    <list default="true" id="2067cb85-5f36-44b7-9ea7-6ebc86b0d401" name="Changes" comment="Ajout de plusieurs contrôles + faire en sorte que le personnage s’arrête de bouger lorsque deux touches opposées sont pressées simultanément,">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/animation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/animation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/game.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/player.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -43,13 +45,14 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.main.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Nameless Game" />
@@ -126,7 +129,15 @@
       <option name="project" value="LOCAL" />
       <updated>1731099189324</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Ajout de plusieurs contrôles + faire en sorte que le personnage s’arrête de bouger lorsque deux touches opposées sont pressées simultanément,">
+      <option name="closed" value="true" />
+      <created>1731100244692</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1731100244692</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -146,7 +157,8 @@
     <MESSAGE value="Optimisations des mouvements et fix un peu l'attaque" />
     <MESSAGE value="Fix attaque sur les cotés en en haut" />
     <MESSAGE value="Optimisation du chargement des sprites + animation d'attaque x50 + ajout d'une continuité de mouvement quand on tombe" />
-    <option name="LAST_COMMIT_MESSAGE" value="Optimisation du chargement des sprites + animation d'attaque x50 + ajout d'une continuité de mouvement quand on tombe" />
+    <MESSAGE value="Ajout de plusieurs contrôles + faire en sorte que le personnage s’arrête de bouger lorsque deux touches opposées sont pressées simultanément," />
+    <option name="LAST_COMMIT_MESSAGE" value="Ajout de plusieurs contrôles + faire en sorte que le personnage s’arrête de bouger lorsque deux touches opposées sont pressées simultanément," />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

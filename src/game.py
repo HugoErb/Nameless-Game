@@ -2,7 +2,7 @@ import sys
 
 from player import Player
 from settings import *
-from src.map import MapManager
+from map import MapManager
 
 
 class Game:
@@ -35,19 +35,21 @@ class Game:
         pressed = pygame.key.get_pressed()
 
         if self.player.state == "alive":
+            # On démarre une attaque uniquement si la touche est pressée et qu'aucune attaque n'est en cours
+            if pressed[KEY_ATTACKING] and not self.player.is_attacking:
+                self.player.start_attack()
 
-            # Animation d'attaque
-            if not self.is_attacking:
-                if pressed[KEY_ATTACKING]:
-                    self.player.attacking()
+            # Si une attaque est en cours, on continue l'animation d'attaque
+            elif self.player.is_attacking:
+                self.player.attacking()
 
-                # Gérer le mouvement du joueur
-                else:
-                    self.handle_movement(pressed)
+            # Sinon, on gére les déplacements du joueur
+            else:
+                self.handle_movement(pressed)
 
-                    # Si aucune touche de direction n'est pressée, réinitialiser l'animation
-                    if not any([pressed[KEY_UP], pressed[KEY_DOWN], pressed[KEY_LEFT], pressed[KEY_RIGHT]]):
-                        self.player.not_moving()
+                # Si aucune touche de direction n'est pressée, réinitialiser l'animation
+                if not any([pressed[KEY_UP], pressed[KEY_DOWN], pressed[KEY_LEFT], pressed[KEY_RIGHT]]):
+                    self.player.not_moving()
 
     def handle_movement(self, pressed):
         # Vérification des touches opposées
